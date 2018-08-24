@@ -1,0 +1,99 @@
+# For public, HTTPS servers.
+version: '2'
+services:
+  rabbit:
+    environment:
+      - RABBITMQ_LOG_BASE=/var/log/rabbitmq
+    restart: on-failure
+    network_mode: bridge
+
+  postgres:
+    env_file:
+      - ./envfile.server.txt
+    restart: on-failure
+    network_mode: bridge
+
+  mongo:
+    environment:
+      - MONGO_DATA=/srv/db
+    env_file:
+      - ./envfile.server.txt
+    restart: on-failure
+    network_mode: bridge
+
+  kobocat:
+    env_file:
+      - ./envfile.server.txt
+      - ./envfiles/aws.txt
+      - ./envfiles/external_services.txt
+      - ./envfiles/kobocat.txt
+      - ./envfiles/nginx.txt
+      - ./envfiles/smtp.txt
+    links:
+      - rabbit
+      - mongo
+      - postgres
+      - kpi
+    environment:
+      - ENKETO_PROTOCOL=https
+    restart: on-failure
+    network_mode: bridge
+
+  kpi:
+    env_file:
+      - ./envfile.server.txt
+      - ./envfiles/aws.txt
+      - ./envfiles/external_services.txt
+      - ./envfiles/kpi.txt
+      - ./envfiles/nginx.txt
+      - ./envfiles/smtp.txt
+    environment:
+      - SECURE_PROXY_SSL_HEADER=HTTP_X_FORWARDED_PROTO, https
+    links:
+      - postgres
+      - rabbit
+      - mongo
+    restart: on-failure
+    network_mode: bridge
+
+  nginx:
+    env_file:
+      - ./envfile.server.txt
+      - ./envfiles/nginx.txt
+      - ./envfiles/kobocat.txt
+      - ./envfiles/kpi.txt
+    environment:
+      - NGINX_CONFIG_FILE_NAME=nginx_site_https.conf
+      - TEMPLATED_VAR_REFS=$${PUBLIC_DOMAIN_NAME} $${KOBOFORM_PUBLIC_SUBDOMAIN} $${KOBOCAT_PUBLIC_SUBDOMAIN} $${ENKETO_EXPRESS_PUBLIC_SUBDOMAIN}
+    ports:
+      - 80:80
+      - 443:443
+    links:
+      - kobocat
+      - kpi
+      - enketo_express
+    restart: on-failure
+    network_mode: bridge
+
+  # Adapted from https://github.com/${REPO_NAME}/${REPO_PREFIX}_enketo-express/blob/docker/docker-compose.yml.
+  enketo_express:
+    env_file:
+      - ./envfile.server.txt
+      - ./envfiles/external_services.txt
+    links:
+      - redis_main
+      - redis_cache
+    restart: on-failure
+    network_mode: bridge
+
+  # Adapted from https://github.com/${REPO_NAME}/${REPO_PREFIX}_enketo-express/blob/docker/docker-compose.yml.
+  redis_main:
+    # Map our "main" Redis config into the container.
+    restart: on-failure
+    network_mode: bridge
+
+  # Adapted from https://github.com/${REPO_NAME}/${REPO_PREFIX}_enketo-express/blob/docker/docker-compose.yml.
+  redis_cache:
+    # Map our "cache" Redis config into the container.
+    restart: on-failure
+    network_mode: bridge

@@ -1,0 +1,3 @@
+[submodule "src/kobo-docker"]
+	path = src/kobo-docker
+	url = https://github.com/kartoza/kobo-docker.git

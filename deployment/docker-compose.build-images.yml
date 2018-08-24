@@ -1,0 +1,22 @@
+# Only contains definition that needs to be rebuild
+version: '2'
+services:
+  rabbit:
+    image: ${REPO_NAME}/${REPO_PREFIX}_rabbit:${TAG_NAME}
+    # Dev: Build the image locally.
+    build: ../src/kobo-docker/base_images/rabbit
+
+  postgres:
+    image: ${REPO_NAME}/${REPO_PREFIX}_postgres:${TAG_NAME}
+    # Dev: Build the image locally.
+    build: ../src/kobo-docker/base_images/postgres
+
+  mongo:
+    image: ${REPO_NAME}/${REPO_PREFIX}_mongo:${TAG_NAME}
+    # Dev: Build the image locally.
+    build: ../src/kobo-docker/base_images/mongo
+
+  nginx:
+    image: ${REPO_NAME}/${REPO_PREFIX}_nginx:${TAG_NAME}
+    # Dev: Build the image locally.
+    build: ../src/kobo-docker/base_images/nginx
