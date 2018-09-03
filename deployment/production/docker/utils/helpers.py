@@ -100,3 +100,27 @@ def generate_dockerfile_for_service(
 
     with open(dockerfile_path, 'w') as f:
         f.write(dockerfile_content)
+
+
+def parse_env_txt(filepath):
+    with open(filepath) as f:
+        lines = []
+        for line in f:
+            line = line.strip()
+            if line and not line.startswith('#'):
+                lines.append(line)
+
+    return lines
+
+
+def generate_yaml_env_list(filepath):
+    lines = parse_env_txt(filepath)
+    return [
+        ' - ' + l for l in lines
+    ]
+
+
+def print_env_list(filepath):
+    lines = generate_yaml_env_list(filepath)
+    for l in lines:
+        print l
