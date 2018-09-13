@@ -1,6 +1,7 @@
 # coding=utf-8
 import os
 import shutil
+from distutils import dir_util
 
 import yaml
 from jinja2 import Template
@@ -21,6 +22,8 @@ def read_mount_list(definition, service_name):
 def copy_file_list(mount_list, service_name):
     production_build_root = deployment_root('production/docker')
     files_root = os.path.join(production_build_root, service_name, 'files')
+    files_overrides_root = os.path.join(
+        production_build_root, service_name, 'files_overrides')
     copy_list = []
 
     try:
@@ -37,16 +40,29 @@ def copy_file_list(mount_list, service_name):
         container_path = parsed_paths[1]
         if os.path.isfile(source_path):
             shutil.copy(source_path, target_path)
+
+            # check if overrides exists, use that if exists
+            target_path_override = os.path.join(
+                files_overrides_root, basename)
+            if os.path.exists(target_path_override):
+                shutil.copy(target_path_override, target_path)
         elif os.path.isdir(source_path):
+            # if this is a dir, then definitely copy from kobo docker first
             if not basename:
                 basename = os.path.basename(os.path.dirname(source_path))
             target_path = os.path.join(files_root, basename)
             print basename
             print source_path
             print files_root
-            shutil.copytree(source_path, target_path)
+            dir_util.copy_tree(source_path, target_path)
             if not container_path.endswith('/'):
                 container_path = container_path + '/'
+
+            # then copy from overrides if exists
+            target_path_override = os.path.join(
+                files_overrides_root, basename)
+            if os.path.exists(target_path_override):
+                dir_util.copy_tree(target_path_override, target_path)
 
         service_path = os.path.join(production_build_root, service_name)
 
