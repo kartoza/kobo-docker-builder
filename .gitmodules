@@ -1,3 +1,9 @@
 [submodule "src/kobo-docker"]
 	path = src/kobo-docker
 	url = https://github.com/kartoza/kobo-docker.git
+[submodule "src/kpi"]
+	path = src/kpi
+	url = https://github.com/kobotoolbox/kpi.git
+[submodule "src/kobocat"]
+	path = src/kobocat
+	url = https://github.com/kobotoolbox/kobocat.git
