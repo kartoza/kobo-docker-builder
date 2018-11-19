@@ -7,3 +7,7 @@
 [submodule "src/kobocat"]
 	path = src/kobocat
 	url = https://github.com/kobotoolbox/kobocat.git
+[submodule "src/kobocat-template"]
+	path = src/kobocat-template
+	url = https://github.com/kartoza/kobocat-template.git
+	branch = develop
