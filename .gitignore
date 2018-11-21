@@ -104,3 +104,4 @@ deployment/production/docker/**/files/
 deployment/production/docker/**/Dockerfile
 deployment/secret
 deployment/production/docker/env_list.env
+src/custom_kobocat_theme

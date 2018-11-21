@@ -11,3 +11,7 @@
 	path = src/kobocat-template
 	url = https://github.com/kartoza/kobocat-template.git
 	branch = develop
+[submodule "src/custom_kobocat_theme"]
+	path = src/custom_kobocat_theme
+	url = https://github.com/kartoza/custom_kobocat_theme.git
+	branch = develop
