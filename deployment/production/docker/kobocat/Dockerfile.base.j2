@@ -1,0 +1,32 @@
+FROM python:3.7.0-stretch as intermediate
+
+RUN mkdir -p /root/.ssh
+COPY ssh_key/* /root/.ssh/
+
+RUN chmod -R 600 /root/.ssh/id_rsa
+
+RUN touch /root/.ssh/known_hosts
+
+RUN ssh-keyscan github.com >> /root/.ssh/known_hosts
+
+ARG KOBOCAT_TEMPLATE_REPO=git@github.com:kartoza/kobocat-template.git
+ARG KOBOCAT_TEMPLATE_TAG=master
+
+RUN mkdir -p /srv/src
+
+WORKDIR /srv/src
+
+RUN git clone --branch ${KOBOCAT_TEMPLATE_TAG} --depth 1 ${KOBOCAT_TEMPLATE_REPO} kobocat-template
+
+{% block final_step %}
+
+{% block intermediate_step %}
+# This block here serves as intermediate step inside the final step after FROM declaration
+RUN rm -rf /srv/src/kobocat-template
+
+COPY --from=intermediate /srv/src/kobocat-template/ /srv/src/kobocat-template/
+
+{% endblock intermediate_step %}
+
+{% endblock final_step %}
+

@@ -91,11 +91,13 @@ services:
       - vols-db:/srv/db
       - backups-postgres:/srv/backups
       - ../src/kobo-docker/base_images/postgres/init_postgres.bash:/etc/my_init.d/10_init_postgres.bash:ro
+      - ./scripts/postgres/restore_postgres.bash:/srv/restore_postgres.bash:ro
 
   mongo:
     volumes:
       - vols-mongo:/srv/db
       - backups-mongo:/srv/backups
+      - ./scripts/mongo/restore_mongo.bash:/srv/restore_mongo.bash:ro
 
   kobocat:
     volumes:
@@ -108,6 +110,7 @@ services:
       - ../src/kobo-docker/scripts/wait_for_postgres.bash:/etc/my_init.d/03_wait_for_postgres.bash:ro
       - ../src/kobo-docker/scripts/wait_for_kpi.bash:/etc/my_init.d/04_wait_for_kpi.bash:ro
       - ../src/kobo-docker/scripts/runtime_variables_kobocat.source.bash:/etc/profile.d/runtime_variables_kobocat.source.bash.sh:ro
+      - ./scripts/kobocat/restore_media.bash:/srv/src/kobocat/docker/restore_media.bash:ro
 
   kpi:
     volumes:

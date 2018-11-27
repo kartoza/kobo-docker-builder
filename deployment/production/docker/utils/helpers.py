@@ -4,7 +4,7 @@ import shutil
 from distutils import dir_util
 
 import yaml
-from jinja2 import Template
+from jinja2 import Template, FileSystemLoader, Environment
 
 
 def deployment_root(*path):
@@ -15,15 +15,24 @@ def deployment_root(*path):
 
 def read_mount_list(definition, service_name):
     paths = definition['services'][service_name]['volumes']
-    paths = [p for p in paths if p.startswith('../src/kobo-docker')]
+
+    def _included_path(path):
+        return path.startswith('../src/kobo-docker') \
+               or path.startswith('./scripts')
+
+    paths = [p for p in paths if _included_path(p)]
     return paths
 
 
 def copy_file_list(mount_list, service_name):
     production_build_root = deployment_root('production/docker')
     files_root = os.path.join(production_build_root, service_name, 'files')
-    files_overrides_root = os.path.join(
-        production_build_root, service_name, 'files_overrides')
+    files_overrides_root = [
+        # Look for files in production/docker/service_name/files_override
+        os.path.join(production_build_root, service_name, 'files_overrides'),
+        # Look for files in scripts/service_name
+        deployment_root('scripts', service_name),
+        ]
     copy_list = []
 
     try:
@@ -42,10 +51,13 @@ def copy_file_list(mount_list, service_name):
             shutil.copy(source_path, target_path)
 
             # check if overrides exists, use that if exists
-            target_path_override = os.path.join(
-                files_overrides_root, basename)
-            if os.path.exists(target_path_override):
-                shutil.copy(target_path_override, target_path)
+            for overrides_root in files_overrides_root:
+                target_path_override = os.path.join(
+                    overrides_root, basename)
+                if os.path.exists(target_path_override):
+                    shutil.copy(target_path_override, target_path)
+                    break
+
         elif os.path.isdir(source_path):
             # if this is a dir, then definitely copy from kobo docker first
             if not basename:
@@ -59,10 +71,12 @@ def copy_file_list(mount_list, service_name):
                 container_path = container_path + '/'
 
             # then copy from overrides if exists
-            target_path_override = os.path.join(
-                files_overrides_root, basename)
-            if os.path.exists(target_path_override):
-                dir_util.copy_tree(target_path_override, target_path)
+            for overrides_root in files_overrides_root:
+                target_path_override = os.path.join(
+                    overrides_root, basename)
+                if os.path.exists(target_path_override):
+                    dir_util.copy_tree(target_path_override, target_path)
+                    break
 
         service_path = os.path.join(production_build_root, service_name)
 
@@ -73,22 +87,31 @@ def copy_file_list(mount_list, service_name):
     return copy_list
 
 
-def generate_docker_copy_instruction(base_image, copy_list):
-    dockerfile_template_path = deployment_root(
-        'production/docker/utils/Dockerfile.j2')
-    with open(dockerfile_template_path) as f:
-        template = Template(f.read())
+def generate_docker_copy_instruction(dockerfile_path, base_image, copy_list):
+    # check if Dockerfile base exists
+    dirname = os.path.dirname(dockerfile_path)
+    base_dockerfile_path = os.path.join(dirname, 'Dockerfile.base.j2')
+
+    base_exists = os.path.exists(base_dockerfile_path)
 
     contexts = {
+        'base_exists': base_exists,
         'BASE_IMAGE': base_image,
         'FILES': copy_list
     }
+
+    dockerfile_template_path = deployment_root(
+        'production/docker/utils')
+    loader = FileSystemLoader([dirname, dockerfile_template_path])
+    environment = Environment(loader=loader)
+    template = environment.get_template('Dockerfile.j2')
+
     return template.render(**contexts)
 
 
 def generate_dockerfile_for_service(
         service_name,
-        base_image_name):
+        image_template_name):
 
     dockerfile_path = deployment_root(
         'production/docker', service_name, 'Dockerfile')
@@ -112,7 +135,7 @@ def generate_dockerfile_for_service(
     mount_list = read_mount_list(volume_definition, service_name)
     copy_list = copy_file_list(mount_list, service_name)
     dockerfile_content = generate_docker_copy_instruction(
-        base_image_name, copy_list)
+        dockerfile_path, image_template_name, copy_list)
 
     with open(dockerfile_path, 'w') as f:
         f.write(dockerfile_content)
