@@ -1,0 +1,19 @@
+# To override docker volumes for local source code development/debugging
+version: '2'
+services:
+  kobocat:
+    volumes:
+      - ./backups/backups-kobocat:/srv/backups
+      - ../src/kobocat:/srv/src/kobocat
+
+  kpi:
+    volumes:
+      - ../src/kpi:/srv/src/kpi
+
+  postgres:
+    volumes:
+      - ./backups/backups-postgres:/srv/backups
+
+  mongo:
+    volumes:
+      - ./backups/backups-mongo:/srv/backups

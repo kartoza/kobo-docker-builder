@@ -1,5 +1,22 @@
+{% if base_exists %}
+
+{% extends "Dockerfile.base.j2" %}
+
+{% endif %}
+
+
+{% block final_step %}
+
 FROM {{ BASE_IMAGE }}
+
+{% block intermediate_step %}
+
+{{ super() }}
+
+{% endblock intermediate_step %}
 
 {% for f in FILES %}
 COPY {{ f.source }} {{ f.target }}
 {% endfor %}
+
+{% endblock final_step %}

@@ -97,6 +97,7 @@ pycharm_helpers
 
 !.gitkeep
 
+deployment/backups
 deployment/docker-compose.override.yml
 deployment/envfile.server.txt
 deployment/envfile.local.txt
@@ -105,3 +106,7 @@ deployment/production/docker/**/Dockerfile
 deployment/secret
 deployment/production/docker/env_list.env
 src/custom_kobocat_theme
+deployment/production/docker/**/ssh_key/
+
+# non generic custom theme need not be included in the repo
+src/kobocat-template
