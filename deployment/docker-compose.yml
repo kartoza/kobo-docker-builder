@@ -70,6 +70,7 @@ services:
       - ./scripts/wait_for_kpi.bash:/etc/my_init.d/04_wait_for_kpi.bash:ro
       - ./scripts/runtime_variables_kobocat.source.bash:/etc/profile.d/runtime_variables_kobocat.source.bash.sh:ro
       - ../src/kobocat-template:/srv/src/kobocat-template
+      - ../src/custom_kobocat_theme:/srv/src/custom_kobocat_theme
       # Dev: Use live source directories from the host machine.
       #- ../kobocat:/srv/src/kobocat
       #- ../formpack/src/formpack:/usr/local/lib/python2.7/dist-packages/formpack
@@ -79,6 +80,8 @@ services:
       # - ./.transifexrc:/root/.transifexrc
     environment:
       - ENKETO_PROTOCOL=https
+      - DJANGO_SETTINGS_MODULE=custom_kobocat_theme.settings
+      - PYTHONPATH=/srv/src/custom_kobocat_theme
     restart: on-failure
     # NOTE: Workaround to force name resolution inside containers. If enabled,
     #   customize with your actual subdomains+domain and server IP. Clients

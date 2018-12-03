@@ -105,6 +105,7 @@ deployment/production/docker/**/files/
 deployment/production/docker/**/Dockerfile
 deployment/secret
 deployment/production/docker/env_list.env
+src/custom_kobocat_theme
 deployment/production/docker/**/ssh_key/
 
 # non generic custom theme need not be included in the repo
