@@ -15,3 +15,7 @@
 	path = src/custom_kobocat_theme
 	url = https://github.com/kartoza/custom_kobocat_theme.git
 	branch = develop
+[submodule "src/custom_kpi_theme"]
+	path = src/custom_kpi_theme
+	url = https://github.com/kartoza/custom_kpi_theme.git
+	branch = develop
