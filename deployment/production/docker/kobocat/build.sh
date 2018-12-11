@@ -55,4 +55,4 @@ docker build -t ${REPO_NAME}/${IMAGE_NAME} \
 	--build-arg KOBOCAT_TEMPLATE_TAG=${KOBOCAT_TEMPLATE_TAG} \
 	${BUILD_ARGS} .
 docker tag ${REPO_NAME}/${IMAGE_NAME}:latest ${REPO_NAME}/${IMAGE_NAME}:${TAG_NAME}
-# docker push ${REPO_NAME}/${IMAGE_NAME}:${TAG_NAME}
+docker push ${REPO_NAME}/${IMAGE_NAME}:${TAG_NAME}
