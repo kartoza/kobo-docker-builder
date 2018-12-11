@@ -28,8 +28,7 @@ fi
 # Build Args Environment
 
 if [ -z "$KOBOCAT_TEMPLATE_REPO" ]; then
-# 	KOBOCAT_TEMPLATE_REPO=git@github.com:kartoza/kobocat-template.git
-	KOBOCAT_TEMPLATE_REPO=https://86f817b41f147f4d51d475f920b937ff986f3305@github.com/kartoza/kobocat-template
+ 	KOBOCAT_TEMPLATE_REPO=git@github.com:kartoza/kobocat-template.git
 fi
 
 if [ -z "$KOBOCAT_TEMPLATE_TAG" ]; then
