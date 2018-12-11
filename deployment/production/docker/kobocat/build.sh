@@ -28,7 +28,8 @@ fi
 # Build Args Environment
 
 if [ -z "$KOBOCAT_TEMPLATE_REPO" ]; then
-	KOBOCAT_TEMPLATE_REPO=git@github.com:kartoza/kobocat-template.git
+# 	KOBOCAT_TEMPLATE_REPO=git@github.com:kartoza/kobocat-template.git
+	KOBOCAT_TEMPLATE_REPO=https://86f817b41f147f4d51d475f920b937ff986f3305@github.com/kartoza/kobocat-template
 fi
 
 if [ -z "$KOBOCAT_TEMPLATE_TAG" ]; then
@@ -55,4 +56,4 @@ docker build -t ${REPO_NAME}/${IMAGE_NAME} \
 	--build-arg KOBOCAT_TEMPLATE_TAG=${KOBOCAT_TEMPLATE_TAG} \
 	${BUILD_ARGS} .
 docker tag ${REPO_NAME}/${IMAGE_NAME}:latest ${REPO_NAME}/${IMAGE_NAME}:${TAG_NAME}
-docker push ${REPO_NAME}/${IMAGE_NAME}:${TAG_NAME}
+# docker push ${REPO_NAME}/${IMAGE_NAME}:${TAG_NAME}

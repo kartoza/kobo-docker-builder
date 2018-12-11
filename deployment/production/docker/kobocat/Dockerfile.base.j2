@@ -10,7 +10,7 @@ RUN touch /root/.ssh/known_hosts
 RUN ssh-keyscan github.com >> /root/.ssh/known_hosts
 
 ARG KOBOCAT_TEMPLATE_REPO=git@github.com:kartoza/kobocat-template.git
-ARG KOBOCAT_TEMPLATE_TAG=master
+ARG KOBOCAT_TEMPLATE_TAG=develop
 
 RUN mkdir -p /srv/src
 
@@ -25,6 +25,10 @@ RUN git clone --branch ${KOBOCAT_TEMPLATE_TAG} --depth 1 ${KOBOCAT_TEMPLATE_REPO
 RUN rm -rf /srv/src/kobocat-template
 
 COPY --from=intermediate /srv/src/kobocat-template/ /srv/src/kobocat-template/
+
+WORKDIR /srv/src
+ADD install-theme-app.sh /usr/bin/install-theme-app.sh
+RUN chmod +x /usr/bin/install-theme-app.sh
 
 {% endblock intermediate_step %}
 
