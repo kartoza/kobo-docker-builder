@@ -34,6 +34,8 @@ WORKDIR /etc/my_init.d
 COPY install-theme-app.sh /etc/my_init.d/01_install-theme-app.sh
 RUN chmod +x /etc/my_init.d/01_install-theme-app.sh
 
+WORKDIR /srv/src
+
 {% endblock intermediate_step %}
 
 {% endblock final_step %}
