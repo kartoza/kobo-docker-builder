@@ -28,7 +28,7 @@ def copy_file_list(mount_list, service_name):
     production_build_root = deployment_root('production/docker')
     files_root = os.path.join(production_build_root, service_name, 'files')
     files_overrides_root = [
-        # Look for files in production/docker/service_name/files_override
+        # Look for files in production/docker/service_name/files_overrides
         os.path.join(production_build_root, service_name, 'files_overrides'),
         # Look for files in scripts/service_name
         deployment_root('scripts', service_name),
