@@ -91,12 +91,14 @@ services:
       - vols-db:/srv/db
       - backups-postgres:/srv/backups
       - ../src/kobo-docker/base_images/postgres/init_postgres.bash:/etc/my_init.d/10_init_postgres.bash:ro
+      - ./scripts/postgres/backup_postgres.bash:/srv/backup_postgres.bash:ro
       - ./scripts/postgres/restore_postgres.bash:/srv/restore_postgres.bash:ro
 
   mongo:
     volumes:
       - vols-mongo:/srv/db
       - backups-mongo:/srv/backups
+      - ./scripts/mongo/backup_mongo.bash:/srv/backup_mongo.bash:ro
       - ./scripts/mongo/restore_mongo.bash:/srv/restore_mongo.bash:ro
 
   kobocat:
