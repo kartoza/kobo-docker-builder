@@ -9,11 +9,15 @@
 
 FROM {{ BASE_IMAGE }}
 
+{% if base_exists %}
+
 {% block intermediate_step %}
 
 {{ super() }}
 
 {% endblock intermediate_step %}
+
+{% endif %}
 
 {% for f in FILES %}
 COPY {{ f.source }} {{ f.target }}
