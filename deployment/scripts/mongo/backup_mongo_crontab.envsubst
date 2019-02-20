@@ -1,0 +1,2 @@
+# `envsubst` template of `cron.d` file to MongoDB.
+${MONGO_BACKUP_SCHEDULE}    root    export MONGO_BACKUP_ARCHIVE_FILENAME="${MONGO_BACKUP_ARCHIVE_FILENAME}"; /srv/backup_mongo.bash 2>&1 | logger -t backup_mongo_crontab
