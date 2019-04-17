@@ -102,8 +102,9 @@ services:
       - ./envfiles/kpi.txt
       - ./envfiles/nginx.txt
       - ./envfiles/smtp.txt
-    environment:
-      - SECURE_PROXY_SSL_HEADER=HTTP_X_FORWARDED_PROTO, https
+#    environment:
+#      # You need to declare this if you are using NGINX SSL termination
+#      - SECURE_PROXY_SSL_HEADER=HTTP_X_FORWARDED_PROTO, https
     links:
       - postgres
       - rabbit

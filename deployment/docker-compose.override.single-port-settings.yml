@@ -1,0 +1,56 @@
+# For single port settings, with subdomains.
+version: '2'
+services:
+  kobocat:
+    volumes:
+      - ./backups/backups-kobocat:/srv/backups
+      - ../src/kobocat:/srv/src/kobocat
+      - ../src/kobocat-template:/srv/src/kobocat-template
+      - ./secret/ssl.crt:/usr/local/share/ca-certificates/ssl.crt
+    environment:
+      KOBOCAT_DJANGO_DEBUG: 'True'
+      USE_ENV_VAR: 'True'
+      ENKETO_URL: http://enketo.kobotoolbox.test
+      KOBOCAT_URL: http://kobocat.kobotoolbox.test
+      KOBOFORM_URL: http://koboform.kobotoolbox.test
+      KOBOCAT_INTERNAL_URL: http://kobocat.kobotoolbox.test
+      CSRF_COOKIE_DOMAIN: .kobotoolbox.test
+      DJANGO_ALLOWED_HOSTS: .kobotoolbox.test
+
+  kpi:
+    volumes:
+      - ../src/kpi:/srv/src/kpi
+      - ./secret/ssl.crt:/usr/local/share/ca-certificates/ssl.crt
+    environment:
+      KPI_DJANGO_DEBUG: 'True'
+      USE_ENV_VAR: 'True'
+      ENKETO_URL: http://enketo.kobotoolbox.test
+      KOBOCAT_URL: http://kobocat.kobotoolbox.test
+      KOBOFORM_URL: http://koboform.kobotoolbox.test
+      KOBOCAT_INTERNAL_URL: http://kobocat.kobotoolbox.test
+      CSRF_COOKIE_DOMAIN: .kobotoolbox.test
+      DJANGO_ALLOWED_HOSTS: .kobotoolbox.test
+
+  enketo_express:
+    volumes:
+      - ./secret/ssl.crt:/usr/local/share/ca-certificates/ssl.crt
+
+  postgres:
+    volumes:
+      - ./backups/backups-postgres:/srv/backups
+
+  mongo:
+    volumes:
+      - ./backups/backups-mongo:/srv/backups
+
+  nginx:
+    environment:
+      # Uncomment following line to just Proxy the web server instead of using
+      # uWSGI (default settings)
+#      KPI_WEB_SERVER: 'PROXY'
+#      KOBOCAT_WEB_SERVER: 'PROXY'
+      NGINX_CONFIG_FILE_NAME: nginx_site_http_subdomain.conf
+      KOBOCAT_SERVER_NAME: kobocat.kobotoolbox.test
+      KOBOFORM_SERVER_NAME: koboform.kobotoolbox.test
+      ENKETO_SERVER_NAME: enketo.kobotoolbox.test
+      TEMPLATED_VAR_REFS: $${KOBOCAT_SERVER_NAME} $${KOBOFORM_SERVER_NAME} $${ENKETO_SERVER_NAME}

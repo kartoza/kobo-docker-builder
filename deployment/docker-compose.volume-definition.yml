@@ -114,6 +114,7 @@ services:
       - ../src/kobo-docker/scripts/wait_for_postgres.bash:/etc/my_init.d/03_wait_for_postgres.bash:ro
       - ../src/kobo-docker/scripts/wait_for_kpi.bash:/etc/my_init.d/04_wait_for_kpi.bash:ro
       - ../src/kobo-docker/scripts/runtime_variables_kobocat.source.bash:/etc/profile.d/runtime_variables_kobocat.source.bash.sh:ro
+      - ./production/docker/kobocat/files_overrides/runtime_variables_kobocat.source.bash:/etc/profile.d/runtime_variables_kobocat.source.bash.sh:ro
       - ./scripts/kobocat/restore_media.bash:/srv/src/kobocat/docker/restore_media.bash:ro
 
   kpi:
@@ -128,7 +129,7 @@ services:
       - ../src/kobo-docker/scripts/wait_for_mongo.bash:/etc/my_init.d/02_wait_for_mongo.bash:ro
       - ../src/kobo-docker/scripts/wait_for_postgres.bash:/etc/my_init.d/03_wait_for_postgres.bash:ro
       - ../src/kobo-docker/scripts/create_kobo_superuser.bash:/etc/my_init.d/20_create_kobo_superuser.bash:ro
-      - ../src/kobo-docker/scripts/runtime_variables_kpi.source.bash:/etc/profile.d/runtime_variables_kpi.source.bash.sh:ro
+      - ./production/docker/kpi/files_overrides/runtime_variables_kpi.source.bash:/etc/profile.d/runtime_variables_kpi.source.bash.sh:ro
 
   nginx:
     volumes:
@@ -138,8 +139,9 @@ services:
         # get the logs out of glusterfs!
         - log-nginx:/var/log/nginx
         - secrets:/tmp/kobo_toolbox_secrets/
-        - ../src/kobo-docker/nginx/:/tmp/kobo_nginx/:ro
-        - ../src/kobo-docker/nginx/nginx_command.bash:/etc/service/nginx/run:ro
+        - ../src/kobo-docker/nginx/:/tmp/kobo_nginx/
+        - ./production/docker/nginx/files_overrides/nginx/nginx_site_http_subdomain.conf.tmpl:/tmp/kobo_nginx/nginx_site_http_subdomain.conf.tmpl
+        - ./production/docker/nginx/files_overrides/nginx_command.bash:/etc/service/nginx/run:ro
 
   # Adapted from https://github.com/${REPO_NAME}/${REPO_PREFIX}_enketo-express/blob/docker/docker-compose.yml.
   enketo_express:
