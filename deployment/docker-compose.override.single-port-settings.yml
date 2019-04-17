@@ -16,6 +16,10 @@ services:
       KOBOCAT_INTERNAL_URL: http://kobocat.kobotoolbox.test
       CSRF_COOKIE_DOMAIN: .kobotoolbox.test
       DJANGO_ALLOWED_HOSTS: .kobotoolbox.test
+      # For kobocat custom theme app
+#      DJANGO_SETTINGS_MODULE: custom_kobocat_theme.settings
+#      ROOT_URLCONF: custom_kobocat_theme.urls
+#      PYTHONPATH: /srv/src/custom_kobocat_theme
 
   kpi:
     volumes:
