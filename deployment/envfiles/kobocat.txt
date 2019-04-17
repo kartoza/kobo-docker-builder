@@ -5,9 +5,7 @@
 KOBOCAT_DJANGO_DEBUG=False
 TEMPLATE_DEBUG=False
 
-# DJANGO_SETTINGS_MODULE=onadata.settings.kc_environ
-DJANGO_SETTINGS_MODULE=custom_kobocat_theme.settings
-ROOT_URLCONF=custom_kobocat_theme.urls
+DJANGO_SETTINGS_MODULE=onadata.settings.kc_environ
 ENKETO_VERSION=Express
 DATABASE_URL=postgis://kobo:kobo@postgres:5432/kobotoolbox
 KOBO_POSTGRES_DB_NAME=kobotoolbox
