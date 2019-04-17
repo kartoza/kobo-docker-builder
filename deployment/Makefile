@@ -33,6 +33,9 @@ shell-postgres:
 shell-mongo:
 	@docker-compose exec mongo /bin/bash
 
+shell-nginx:
+	@docker-compose exec nginx /bin/bash
+
 logs-kpi:
 	@docker-compose logs -f --tail=30 kpi
 
