@@ -101,6 +101,7 @@ deployment/backups
 deployment/docker-compose.override.yml
 deployment/envfile.server.txt
 deployment/envfile.local.txt
+deployment/production/docker/build.env
 deployment/production/docker/**/files/
 deployment/production/docker/**/Dockerfile
 deployment/secret
