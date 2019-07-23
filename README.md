@@ -94,7 +94,8 @@ cp env_list.sample.env env_list.env
 ```
 
 Make sure you know what you're doing because this will build production
-grade image AND push latest tag to docker hub.
+grade image AND push latest tag to docker hub. Instructions below are just quick examples.
+For further info, look on [Production Build README](deployment/production/docker/README.md)
 
 ```
 docker login
